@@ -214,19 +214,21 @@ router.delete("/:id", async (req, res) => {
     if (!id) {
       throw { status: 400, message: `required params id` };
     }
-    const cafeFound = await Cafes.find({ id, status: "active" });
+    const cafeFound = await Cafes.aggregate([
+      { $match: { id, status: "active" } },
+      {
+        $lookup: {
+          from: "employmenthistories",
+          as: "currentEmployees",
+          pipeline: [{ $match: { cafeId: id, employment_end_date: null } }],
+        },
+      },
+    ]);
     if (!cafeFound?.length) {
       throw { status: 404, message: `no cafe found on id ${id} provided` };
     }
-    const currentEmployeeList = await EmploymentHistories.find({
-      $and: [
-        {
-          cafeId: cafeFound[0].id,
-        },
-        { employment_end_date: null },
-      ],
-    });
-    if (currentEmployeeList?.length) {
+    const { currentEmployees } = cafeFound[0];
+    if (currentEmployees?.length) {
       throw {
         status: 400,
         message: `please remove all employees before deleting the cafe`,

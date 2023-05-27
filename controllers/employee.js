@@ -3,6 +3,7 @@ const router = express.Router();
 const Employees = require("../models/employees.js");
 const Cafes = require("../models/cafes.js");
 const EmploymentHistories = require("../models/employmentHistories.js");
+const ObjectId = require("mongodb").ObjectId;
 
 const generateRandomString = (n) => {
   const funcName = `${generateRandomString.name}:`;
@@ -290,28 +291,64 @@ router.post("", async (req, res) => {
     if (validatedPayload.errorList?.length) {
       throw { status: 400, message: validatedPayload.errorList.join("::") };
     }
-    const { email_address, phone_number } = validatedPayload;
-    const employeesFound = await Employees.find({
-      $and: [
-        {
-          $or: [{ phone_number }, { email_address }],
-        },
-        { status: "active" },
-      ],
-    });
-    if (employeesFound.length) {
-      throw { status: 404, message: `duplicated employee data` };
-    }
-    const cafeFound = await Cafes.find({
-      id: validatedPayload.assignCafeId,
-    });
-    if (!cafeFound.length) {
-      throw {
-        status: 404,
-        message: `no cafe found for assignCafeId supplied`,
-      };
-    }
+    const { email_address, phone_number, assignCafeId } = validatedPayload;
     const newEmployeeId = await generateEmployeeId();
+    const currentDateTime = new Date();
+    if (assignCafeId) {
+      const cafeFound = await Cafes.aggregate([
+        {
+          $match: { id: assignCafeId, status: "active" },
+        },
+        {
+          $lookup: {
+            from: "employees",
+            as: "employeesFound",
+            pipeline: [
+              {
+                $match: {
+                  $and: [
+                    {
+                      $or: [{ phone_number }, { email_address }],
+                    },
+                    { status: "active" },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ]);
+      if (!cafeFound?.length) {
+        throw {
+          status: 404,
+          message: `no cafe found for assignCafeId supplied`,
+        };
+      }
+      const { employeesFound } = cafeFound[0];
+      if (employeesFound?.length) {
+        throw {
+          status: 400,
+          message: `duplicated employee data`,
+        };
+      }
+      await EmploymentHistories.create({
+        employeeId: newEmployeeId,
+        cafeId: cafeFound[0].id,
+        employment_start_date: currentDateTime,
+        employment_end_date: null,
+      });
+    } else {
+      const existingEmployeeFound = await Employees.find({
+        $or: [{ phone_number }, { email_address }],
+        status: "active",
+      });
+      if (existingEmployeeFound?.length) {
+        throw {
+          status: 400,
+          message: `duplicated employee data`,
+        };
+      }
+    }
     const newEmployee = await Employees.create({
       id: newEmployeeId,
       name: validatedPayload.name,
@@ -320,14 +357,7 @@ router.post("", async (req, res) => {
       gender: validatedPayload.gender,
       status: "active",
     });
-    const employmentHistory = await EmploymentHistories.create({
-      employeeId: newEmployeeId,
-      cafeId: cafeFound[0].id,
-      employment_start_date: new Date(),
-      employment_end_date: null,
-    });
-
-    res.status(200).json({ data: newEmployee });
+    return res.status(200).json({ data: newEmployee });
   } catch (error) {
     return res
       .status(error.status || 500)
@@ -348,9 +378,86 @@ router.put("/:id", async (req, res) => {
     if (validatedPayload.errorList?.length) {
       throw { status: 400, message: validatedPayload.errorList.join("::") };
     }
-    const employeeFound = await Employees.find({ id, status: "active" });
+    const employeeFound = await Employees.aggregate([
+      { $match: { id, status: "active" } },
+      {
+        $lookup: {
+          from: "employees",
+          as: "clashesExisting",
+          pipeline: [
+            {
+              $match: {
+                $or: [
+                  { email_address: validatedPayload.email_address },
+                  { phone_number: validatedPayload.phone_number },
+                ],
+                status: "active",
+                id: { $nin: [id] },
+              },
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "cafes",
+          as: "cafeFound",
+          pipeline: [{ $match: { id: validatedPayload.assignCafeId } }],
+        },
+      },
+      {
+        $lookup: {
+          from: "employmenthistories",
+          as: "currentEmployment",
+          pipeline: [
+            {
+              $match: { employeeId: id, employment_end_date: null },
+            },
+          ],
+        },
+      },
+    ]);
     if (!employeeFound?.length) {
       throw { status: 404, message: `no cafe found on id ${id} provided` };
+    }
+    const { clashesExisting, cafeFound, currentEmployment } = employeeFound[0];
+    if (clashesExisting.length) {
+      throw {
+        status: 400,
+        message: `update data clashes with existing employee`,
+      };
+    }
+    if (!cafeFound.length) {
+      throw {
+        status: 404,
+        message: `supplied cafeId not found`,
+      };
+    }
+    if (currentEmployment.length) {
+      const { _id, cafeId } = currentEmployment[0];
+      if (cafeId !== validatedPayload.assignCafeId) {
+        const currentDateTime = new Date();
+        await Promise.all([
+          EmploymentHistories.findOneAndUpdate(
+            { _id: new ObjectId(_id) },
+            { $set: { employment_end_date: currentDateTime } }
+          ),
+          EmploymentHistories.create({
+            employeeId: id,
+            cafeId: cafeFound[0].id,
+            employment_start_date: currentDateTime,
+            employment_end_date: null,
+          }),
+        ]);
+      }
+    } else {
+      const currentDateTime = new Date();
+      await EmploymentHistories.create({
+        employeeId: id,
+        cafeId: cafeFound[0].id,
+        employment_start_date: currentDateTime,
+        employment_end_date: null,
+      });
     }
     const update = {
       name: validatedPayload.name,
@@ -362,7 +469,7 @@ router.put("/:id", async (req, res) => {
       { id },
       { $set: update }
     );
-    res.status(200).json({ data: returnData });
+    return res.status(200).json({ data: returnData });
   } catch (error) {
     return res
       .status(error.status || 500)
@@ -378,19 +485,30 @@ router.delete("/:id", async (req, res) => {
     if (!id) {
       throw { status: 400, message: `invalid id params` };
     }
-    const existingEmployee = await Employees.find({ id, status: "active" });
+    const existingEmployee = await Employees.aggregate([
+      { $match: { id, status: "active" } },
+      {
+        $lookup: {
+          from: "employmenthistories",
+          as: "currentEmployment",
+          pipeline: [{ $match: { employeeId: id, employment_end_date: null } }],
+        },
+      },
+    ]);
     if (!existingEmployee?.length) {
       throw { status: 404, message: `no employee found on id:${id}` };
     }
-    const currentEmployment = await EmploymentHistories.find({
-      employeeId: id,
-      employment_end_date: null,
-    });
+    const { currentEmployment } = existingEmployee[0];
     if (currentEmployment?.length) {
-      throw {
-        status: 400,
-        message: `please remove all employee from cafe before deleting`,
-      };
+      const employmentDetails = currentEmployment[0];
+      console.log("here?");
+      console.log(employmentDetails["_id"]);
+      await EmploymentHistories.findOneAndUpdate(
+        {
+          _id: employmentDetails["_id"],
+        },
+        { $set: { employment_end_date: new Date() } }
+      );
     }
     const deletedEmployee = await Employees.findOneAndUpdate(
       { id },

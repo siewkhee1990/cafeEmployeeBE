@@ -91,21 +91,54 @@ router.get("/assign/:empId/:cafeId", async (req, res) => {
         } params`,
       };
     }
-    const existingEmployee = await Employees.find({ id: empId });
-    if (!existingEmployee?.length) {
-      throw { status: 404, message: `no employee found for id ${empId}` };
-    }
-    const existingEmployment = await EmploymentHistories.find({
-      employeeId: empId,
-      employment_end_date: null,
-    });
-    if (existingEmployment?.length) {
-      throw { status: 404, message: `existing employment found` };
-    }
-    const existingCafe = await Cafes.find({ id: cafeId });
-    if (!existingCafe?.length) {
-      throw { status: 404, message: `no cafe found for id ${cafeId}` };
-    }
+    const existingEmployee = await Employees.aggregate([
+      {
+        $match: {
+          id: empId,
+        },
+      },
+      {
+        $lookup: {
+          from: "employmenthistories",
+          as: "existingEmployment",
+          pipeline: [
+            {
+              $match: {
+                employeeId: empId,
+                employment_end_date: null,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "cafes",
+          as: "existingCafe",
+          pipeline: [
+            {
+              $match: { id: cafeId },
+            },
+          ],
+        },
+      },
+    ]);
+    console.log(123);
+    // const existingEmployee = await Employees.find({ id: empId });
+    // if (!existingEmployee?.length) {
+    //   throw { status: 404, message: `no employee found for id ${empId}` };
+    // }
+    // const existingEmployment = await EmploymentHistories.find({
+    //   employeeId: empId,
+    //   employment_end_date: null,
+    // });
+    // if (existingEmployment?.length) {
+    //   throw { status: 404, message: `existing employment found` };
+    // }
+    // const existingCafe = await Cafes.find({ id: cafeId });
+    // if (!existingCafe?.length) {
+    //   throw { status: 404, message: `no cafe found for id ${cafeId}` };
+    // }
     // const createdEmployment = await EmploymentHistories.create({
     //   employeeId: empId,
     //   cafeId,
@@ -113,7 +146,7 @@ router.get("/assign/:empId/:cafeId", async (req, res) => {
     //   employment_end_date: null,
     // });
     // return res.status(200).json({ data: createdEmployment });
-    return res.status(200).json({ data: "done" });
+    return res.status(200).json({ data: existingEmployee });
   } catch (error) {
     return res
       .status(error.status || 500)

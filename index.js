@@ -13,7 +13,7 @@ require("./db");
 
 //this will catch any route that doesn't exist
 app.get("*", (req, res) => {
-  res.status(404).json("Sorry, page not found");
+  return res.status(404).json("Sorry, page not found");
 });
 
 app.listen(PORT, () => {
