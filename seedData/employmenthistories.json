@@ -1,0 +1,86 @@
+[
+  {
+    "employeeId": "UIgx6PJZZ",
+    "cafeId": "73dac979-34e3-4460-867b-1b1c686c3718",
+    "employment_start_date": "2023-05-27T19:19:15.383Z",
+    "employment_end_date": "2023-05-27T19:33:22.757Z"
+  },
+  {
+    "employeeId": "UIqwVUnBz",
+    "cafeId": "73dac979-34e3-4460-867b-1b1c686c3718",
+    "employment_start_date": "2023-05-27T19:24:42.996Z",
+    "employment_end_date": "2023-05-27T19:25:42.996Z"
+  },
+  {
+    "employeeId": "UIxneW4V1",
+    "cafeId": "40debc89-e191-47fc-8b07-abfc6f9eba6c",
+    "employment_start_date": "2023-05-27T19:26:32.514Z",
+    "employment_end_date": null
+  },
+  {
+    "employeeId": "UIoGkdtMt",
+    "cafeId": "58caefe4-f24e-4d43-852c-0366e099b93c",
+    "employment_start_date": "2023-05-27T19:28:18.854Z",
+    "employment_end_date": null
+  },
+  {
+    "employeeId": "UIgx6PJZZ",
+    "cafeId": "992f33bc-9df9-4e4f-9cd5-4e38ac0d905c",
+    "employment_start_date": "2023-05-27T19:33:22.757Z",
+    "employment_end_date": "2023-05-27T19:33:32.308Z"
+  },
+  {
+    "employeeId": "UIgx6PJZZ",
+    "cafeId": "73dac979-34e3-4460-867b-1b1c686c3718",
+    "employment_start_date": "2023-05-27T19:33:32.308Z",
+    "employment_end_date": "2023-05-27T20:03:00.171Z"
+  },
+  {
+    "employeeId": "UIpJKIest",
+    "cafeId": "76523efd-34d6-4839-bef4-5b5e07885a11",
+    "employment_start_date": "2023-05-27T19:34:13.904Z",
+    "employment_end_date": null
+  },
+  {
+    "employeeId": "UI0R3lRJV",
+    "cafeId": "0e48199e-b714-413a-acf5-92958c0df848",
+    "employment_start_date": "2023-05-27T19:34:38.058Z",
+    "employment_end_date": null
+  },
+  {
+    "employeeId": "UItY3EmoI",
+    "cafeId": "5935b9ed-29a0-4605-861a-268e07ba791d",
+    "employment_start_date": "2023-05-27T19:35:15.392Z",
+    "employment_end_date": null
+  },
+  {
+    "employeeId": "UIjRmB0Ag",
+    "cafeId": "7a110ee1-1b12-4789-8a71-6d379cfc9dd5",
+    "employment_start_date": "2023-05-27T19:35:54.015Z",
+    "employment_end_date": null
+  },
+  {
+    "employeeId": "UIqj7vO7Q",
+    "cafeId": "76523efd-34d6-4839-bef4-5b5e07885a11",
+    "employment_start_date": "2023-05-27T19:40:10.434Z",
+    "employment_end_date": null
+  },
+  {
+    "employeeId": "UIVSqv0Zd",
+    "cafeId": "e02d9f03-062d-4c43-9de2-fededbe3b3fb",
+    "employment_start_date": "2023-05-27T19:40:40.244Z",
+    "employment_end_date": null
+  },
+  {
+    "employeeId": "UIIp5lgPs",
+    "cafeId": "73dac979-34e3-4460-867b-1b1c686c3718",
+    "employment_start_date": "2023-05-27T19:41:14.938Z",
+    "employment_end_date": null
+  },
+  {
+    "employeeId": "UI0QOE4WQ",
+    "cafeId": "73dac979-34e3-4460-867b-1b1c686c3718",
+    "employment_start_date": "2023-05-27T19:42:08.633Z",
+    "employment_end_date": null
+  }
+]

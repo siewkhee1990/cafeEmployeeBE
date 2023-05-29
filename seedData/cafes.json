@@ -1,0 +1,73 @@
+[{
+  "id": "73dac979-34e3-4460-867b-1b1c686c3718",
+  "name": "abc cafe",
+  "description": "abc cafe",
+  "location": "jurong",
+  "status": "active"
+},{
+  "id": "992f33bc-9df9-4e4f-9cd5-4e38ac0d905c",
+  "name": "bcd cafe",
+  "description": "bcd cafe",
+  "location": "jurong",
+  "status": "active"
+},{
+  "id": "e02d9f03-062d-4c43-9de2-fededbe3b3fb",
+  "name": "bcd cafe",
+  "description": "bcd cafe",
+  "location": "lakeside",
+  "status": "active"
+},{
+  "id": "139e102b-5a62-4ab6-af37-317b50e50171",
+  "name": "cde cafe",
+  "description": "cde cafe",
+  "location": "clementi",
+  "status": "active"
+},{
+  "id": "0e48199e-b714-413a-acf5-92958c0df848",
+  "name": "abc cafe",
+  "description": "abc cafe",
+  "location": "clementi",
+  "status": "active"
+},{
+  "id": "40debc89-e191-47fc-8b07-abfc6f9eba6c",
+  "name": "xyz cafe",
+  "description": "xyz cafe",
+  "location": "jurong",
+  "status": "active"
+},{
+  "id": "58caefe4-f24e-4d43-852c-0366e099b93c",
+  "name": "xyz cafe",
+  "description": "xyz cafe",
+  "location": "clementi",
+  "status": "active"
+},{
+  "id": "65abf4dc-b99a-42b5-9b14-04bb75271423",
+  "name": "abc cafe",
+  "description": "abc cafe",
+  "location": "aljunied",
+  "status": "active"
+},{
+  "id": "b992f9c4-8cde-452a-a0f5-50c85a60669c",
+  "name": "bcd cafe",
+  "description": "bcd cafe",
+  "location": "tampines",
+  "status": "active"
+},{
+  "id": "76523efd-34d6-4839-bef4-5b5e07885a11",
+  "name": "stu cafe",
+  "description": "stu cafe",
+  "location": "kallang",
+  "status": "active"
+},{
+  "id": "7a110ee1-1b12-4789-8a71-6d379cfc9dd5",
+  "name": "mno cafe",
+  "description": "mno cafe",
+  "location": "queenstown",
+  "status": "active"
+},{
+  "id": "5935b9ed-29a0-4605-861a-268e07ba791d",
+  "name": "res cafe",
+  "description": "res cafe",
+  "location": "queenstown",
+  "status": "active"
+}]

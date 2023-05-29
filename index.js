@@ -11,6 +11,9 @@ app.use(bodyParser.json());
 require("./routes")(app);
 require("./db");
 
+const seedData = require('./seedData/index.js');
+seedData();
+
 //this will catch any route that doesn't exist
 app.get("*", (req, res) => {
   return res.status(404).json("Sorry, page not found");

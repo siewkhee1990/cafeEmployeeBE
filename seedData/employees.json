@@ -1,0 +1,85 @@
+[{
+  "id": "UIgx6PJZZ",
+  "name": "michael",
+  "email_address": "michael@gmail.com",
+  "phone_number": 99998881,
+  "gender": "male",
+  "status": "active"
+},{
+  "id": "UIqwVUnBz",
+  "name": "patrick",
+  "email_address": "patrick@gmail.com",
+  "phone_number": 88889991,
+  "gender": "male",
+  "status": "inactive"
+},{
+  "id": "UIxneW4V1",
+  "name": "oliver",
+  "email_address": "jason@gmail.com",
+  "phone_number": 99998882,
+  "gender": "male",
+  "status": "active"
+},{
+  "id": "UIoGkdtMt",
+  "name": "edison",
+  "email_address": "edison@gmail.com",
+  "phone_number": 99998884,
+  "gender": "male",
+  "status": "active"
+},{
+  "id": "UIpJKIest",
+  "name": "gerald",
+  "email_address": "gerald@gmail.com",
+  "phone_number": 88889995,
+  "gender": "male",
+  "status": "active"
+},{
+  "id": "UI0R3lRJV",
+  "name": "stephanie",
+  "email_address": "stephanie@gmail.com",
+  "phone_number": 88889997,
+  "gender": "female",
+  "status": "active"
+},{
+  "id": "UItY3EmoI",
+  "name": "amanda",
+  "email_address": "amanda@gmail.com",
+  "phone_number": 88889990,
+  "gender": "female",
+  "status": "active"
+},{
+  "id": "UIjRmB0Ag",
+  "name": "katherin",
+  "email_address": "katherin@gmail.com",
+  "phone_number": 88889998,
+  "gender": "female",
+  "status": "active"
+},{
+  "id": "UIqj7vO7Q",
+  "name": "rowena",
+  "email_address": "rowena@gmail.com",
+  "phone_number": 88887777,
+  "gender": "female",
+  "status": "active"
+},{
+  "id": "UIVSqv0Zd",
+  "name": "janice",
+  "email_address": "janice@gmail.com",
+  "phone_number": 88886667,
+  "gender": "female",
+  "status": "active"
+},{
+  "id": "UIIp5lgPs",
+  "name": "stacey",
+  "email_address": "stacey@gmail.com",
+  "phone_number": 88886868,
+  "gender": "female",
+  "status": "active"
+},{
+  "id": "UI0QOE4WQ",
+  "name": "debbie",
+  "email_address": "debbie@gmail.com",
+  "phone_number": 88889292,
+  "gender": "female",
+  "status": "active"
+}]
