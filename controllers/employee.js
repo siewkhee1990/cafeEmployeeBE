@@ -427,16 +427,25 @@ router.put("/:id", async (req, res) => {
         message: `update data clashes with existing employee`,
       };
     }
-    if (!cafeFound.length) {
+    if (validatedPayload.assignCafeId && !cafeFound.length) {
       throw {
         status: 404,
         message: `supplied cafeId not found`,
       };
     }
+    const currentDateTime = new Date();
     if (currentEmployment.length) {
       const { _id, cafeId } = currentEmployment[0];
-      if (cafeId !== validatedPayload.assignCafeId) {
-        const currentDateTime = new Date();
+      if (!validatedPayload.assignCafeId) {
+        await EmploymentHistories.findOneAndUpdate(
+          { _id: new ObjectId(_id) },
+          { $set: { employment_end_date: currentDateTime } }
+        );
+      }
+      if (
+        validatedPayload.assignCafeId &&
+        cafeId !== validatedPayload.assignCafeId
+      ) {
         await Promise.all([
           EmploymentHistories.findOneAndUpdate(
             { _id: new ObjectId(_id) },
@@ -450,8 +459,7 @@ router.put("/:id", async (req, res) => {
           }),
         ]);
       }
-    } else {
-      const currentDateTime = new Date();
+    } else if (validatedPayload.assignCafeId) {
       await EmploymentHistories.create({
         employeeId: id,
         cafeId: cafeFound[0].id,
@@ -501,8 +509,6 @@ router.delete("/:id", async (req, res) => {
     const { currentEmployment } = existingEmployee[0];
     if (currentEmployment?.length) {
       const employmentDetails = currentEmployment[0];
-      console.log("here?");
-      console.log(employmentDetails["_id"]);
       await EmploymentHistories.findOneAndUpdate(
         {
           _id: employmentDetails["_id"],
